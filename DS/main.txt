@@ -1,0 +1,103 @@
+#include"header.h"
+int main()
+{
+SLL *headptr=0; 
+int op;
+  while(1)
+   {
+     printf("\33[32m Enter the option\n");
+printf("1)add bigin 2)add middle 3)add end 4)print node 5)count node 6)save file 7)read file 8)reverse print 9)recursion print 10)reverse recursion 11)delete all 12)delete node 13)search node 14)sort data 15)reverse link 16) exit \033[0m \n");
+
+scanf("%d",&op)
+     switch(op)
+     {
+          case 1: add_bigin(&header);break;
+	  case 2:
+   	  case 3:
+          case 4:print_node(headptr);break;
+	  case 5:c=count_node(headptr);
+		 printf("Total count : %d",c);break;
+	  case 6:save_file(headptr);break;
+	  case 7:
+	  case 8:
+	  case 9:
+	  case 10:
+	  case 11:
+	  case 12:
+	  case 13:
+          case 14:
+          case 15:
+          case 16:exit(0);
+          default :printf("\033[31;4;5mWrong choice\033[0m\n");
+     }
+  }
+
+}
+
+/*
+
+1.create node 
+2.scan the data
+3.update newely created node next address
+4.update headptr
+*/
+void add_bigin(**ptr)
+{
+  SLL *new;
+new=malloc(sizeof(SLL)); 	// create new node 
+printf("Enter rollno,name and marks\n");
+scanf("%d%s%f",&new->rollno,&new->name,&new->marks);
+new->next=*ptr;		// update newely created node next address 
+*ptr=new;
+}
+
+// printing all node
+void print_node(SLL *ptr)
+{
+ if(ptr==0)
+ {
+  printf("Records not found\n");
+   return 0;
+ }
+
+while(ptr)
+{
+ printf("%d%s%f",ptr->rollno,ptr->name,ptr->mark);
+ptr=ptr-.nxt;
+}
+
+}
+
+// counting all nodes
+int count_node(SLL *ptr)
+{
+ int c=0;
+while(ptr)
+{
+ c++;
+ptr=ptr->next;
+}
+
+return c;
+}
+
+// save the all nodes into a file 
+void save_file(SSL *ptr)
+{
+ if(ptr==0)
+{
+printf("Record not found\n");
+return;
+}
+
+FILE fp;
+fp=fopen("Std.txt","w");
+while(ptr)
+{
+fprintf("%d%s%f",ptr->rollno,ptr->name,ptr->marks);
+ptr=ptr->next;
+
+}
+fclose(fp);
+printf("Data saved in file\n");
+}

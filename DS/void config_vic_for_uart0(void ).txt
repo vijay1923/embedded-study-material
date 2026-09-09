@@ -1,0 +1,7 @@
+void config_vic_for_uart0(void )
+{
+ VICVectCntl1=6(15);
+ VICVectAddr0=(int )UART0_Handler;
+ VICIntEnable=(16);  ENABLE 
+ U0IER=3;	 ENABLE TX AND RX INTERRUPT IN UART0 PERIPHERAL
+}

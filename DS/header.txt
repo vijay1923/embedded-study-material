@@ -1,0 +1,19 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<unistd.h>
+
+typedf sturtc student 
+{
+int rollno;
+char name[20];
+float marks;
+struct student *next;
+}SLL;
+
+void save_file(SSL *ptr);
+int count_node(SLL *ptr);
+void print_node(SLL *ptr);
+void add_bigin(**ptr);
+
+
