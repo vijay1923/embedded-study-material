@@ -1,0 +1,37 @@
+#include"header.h"
+#define si ((I2CONSET>>3)&1)
+#define si0 (I2CONCLR=(1<<3))
+
+void i2c_init(void)
+{
+PINSEL0|=0x50;   // p0.2->scl, p0.3-> SDA
+I2CONSET=0x40;  // master mode of microcontroller
+I2SCLH=I2SCLL=75;   // 100kbps freq
+}
+
+ void i2c_detect(unsigned int sa)
+ {
+  // start condition generate
+
+I2CONSET=1<<5;
+si0;
+while(si==0);
+I2CONCLR=1<<5;
+if(I2STAT!=0x08)
+{
+uart_tx_string("error start\r\n");
+goto exit;
+}
+
+I2DAT=sa;
+si0=;
+while(si==0);
+if(I2CSTAT==0x18) // if ACkis received slave is present
+ {
+  uart0_tx_string("Slave is precent \r\n");
+  uart_hex_ez(sa);goto exit;
+ }
+
+exit: I2CONSET=1<<4;
+si0;
+}

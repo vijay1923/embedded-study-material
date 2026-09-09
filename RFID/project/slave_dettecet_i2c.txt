@@ -1,0 +1,18 @@
+int main()
+{
+int addr=0;
+uart0_init(9600);
+i2c_init();
+uart0_tx_string("Slave detection in process\r\n");
+ while(1)
+ {
+   for(addr=0;addr<1024;addr++)
+  {
+    slave_dedect(addr);
+   delay(10);
+  }
+  slave_detect(0x68);
+  delay(10)
+ }
+
+}

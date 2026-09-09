@@ -1,0 +1,24 @@
+#include"header.h"
+unsigned char a[50],i;
+extern unsigned char flag; flag
+void uart0_rfid_handler()__irq
+{
+  a[i]=U0RBR;
+  if(i>12)
+  {
+  flag=1;
+  i++;
+  }
+  else
+  i++;
+ VICVectAddr=0;  /// isr complete 
+}
+
+void config_vic_uart0(void)
+{
+ VICIntSelect=0;
+ VICVectCntl0=6|(1<<5);
+ VICVectAddr0=(int)uart0_rfid_handler;
+ VICIntEnable=1<<6;
+ U0IER=1;  
+}

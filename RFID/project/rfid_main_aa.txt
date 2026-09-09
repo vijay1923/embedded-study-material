@@ -1,0 +1,24 @@
+#include"header.h"
+extern unsigned char a[50],i;
+unsigned char flag=0;
+main()
+{
+ uart_init(9600);
+ i2c_init();
+ LCD_init_4bit();
+ config_vic_uart0();
+ set_time(0x8,0x15,0x1,0x1,0x10,0x24);  // set time 
+ LCD_cmd_4bit(0xc0);  // set cursor to the home position
+ LCD_string1("SCAN YOUR ID");
+ while(1)
+ {
+   show_time();
+   if(flag)
+   {
+   get_time();
+   uart_tx_string(a);
+   flag=0;
+   }
+
+ }
+}

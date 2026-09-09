@@ -1,0 +1,7 @@
+void uart0_hex(char p)
+{
+char a,b;
+uart_tx_string("0x");
+a=((ch/16))+48;
+b=((ch%16))+48;
+}
