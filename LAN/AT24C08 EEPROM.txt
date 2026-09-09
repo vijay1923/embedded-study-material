@@ -1,0 +1,22 @@
+#include <lpc21xx.h>
+#include "header.h"
+// WRITE AND WRITE INTO AT24C08 EEPROM USING I2C
+int main()
+{
+    lcd_init();         // Initialize LCD
+    i2c_init();         // Initialize I2C
+    uart0_init(9600);   // Initialize UART
+    lcd_cgram();        // Initialize LCD CGRAM
+
+   char ds = 'A';  
+    char dr,t;        
+    i2c_send(0xA0, 0x2, ds);  // Writing 'A' to EEPROM at Page 1 
+		lcd_cmd (0x80);
+  
+    i2c_read(0xA1, 0x2);		// Read from EEPROM at Page 1 
+    dr = i2c_read(0xA1, 0x2);	
+	t=(char)dr;
+	lcd_data(t);
+	uart0_tx(t);
+}
+

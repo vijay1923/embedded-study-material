@@ -1,0 +1,1 @@
+ ssh -p 7777 v24be3v8@blrvectorindia.ddns.net

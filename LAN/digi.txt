@@ -1,0 +1,58 @@
+// digi
+
+#include <lpc21xx.h>
+
+#define SET 0x01   // P0.0 - Enable Time Setting Button
+#define INC 0x02   // P0.1 - Increment Button
+#define NEXT 0x04  // P0.2 - Move between Hours, Minutes, Seconds
+
+void delay_ms(unsigned int count);
+void rtc_get_time(unsigned char *h, unsigned char *m, unsigned char *s);
+void rtc_set_time(unsigned char h, unsigned char m, unsigned char s);
+void update_display(unsigned char h, unsigned char m, unsigned char s);
+
+int main(void) {
+    unsigned char hours, minutes, seconds;
+    unsigned char mode = 0, select = 0;
+
+    // Initialize peripherals
+    PINSEL0 = 0x00000000; // Set P0 as GPIO
+    IODIR0 &= ~(SET | INC | NEXT); // Set switches as input
+
+    rtc_set_time(12, 0, 0); // Set default time to 12:00:00
+
+    while (1) {
+        if (!(IOPIN0 & SET)) {
+            mode = 1; // Enable time setting mode
+            delay_ms(500);
+        }
+
+        if (mode == 1) {
+            rtc_get_time(&hours, &minutes, &seconds);
+            while (!(IOPIN0 & SET)); // Wait for release
+
+            while (mode) {
+                update_display(hours, minutes, seconds);
+
+                if (!(IOPIN0 & NEXT)) {
+                    select = (select + 1) % 3; // Cycle through Hours, Minutes, Seconds
+                    delay_ms(300);
+                }
+                if (!(IOPIN0 & INC)) {
+                    if (select == 0) hours = (hours + 1) % 24;
+                    else if (select == 1) minutes = (minutes + 1) % 60;
+                    else if (select == 2) seconds = (seconds + 1) % 60;
+                    delay_ms(300);
+                }
+                if (!(IOPIN0 & SET)) {
+                    rtc_set_time(hours, minutes, seconds);
+                    mode = 0;
+                    delay_ms(500);
+                }
+            }
+        }
+        rtc_get_time(&hours, &minutes, &seconds);
+        update_display(hours, minutes, seconds);
+        delay_ms(1000);
+    }
+}

@@ -1,0 +1,74 @@
+// DIGITAL CLOCK ASSIGNMENT 
+#include<lpc21xx.h>
+#include "header.h"
+int main(){
+	char  h,m,s,dow,dd,mm,yy,a,DD,MM,YY;
+	char  day[][4]={"","SUN","MON","TUE","WED","THU","FRI","SAT"};
+	i2c_init();
+	lcd_init();
+	lcd_cgram();
+	lcd_cmd(0x0C);//cursor off
+	i2c_send(0xD0,0x2,0x51);
+	i2c_send(0xD0,0x1,0x59);
+	while(1)
+	{
+		h=i2c_read(0xD1,0x2);//RAED HOURS
+		m=i2c_read(0xD1,0x1);// READ MINUTS
+		s=i2c_read(0xD1,0x0);// RAED SECONDS
+		dow=i2c_read(0xD1,0x3);// READ DAY
+		
+		dd=i2c_read(0xD1,0x4);  // READ DATE 
+		DD=((dd>>4)*10) + (dd&0x0f);
+		
+		mm=i2c_read(0xD1,0x5);   // RAED MONTH
+		MM=((mm>>4)*10) + (mm&0xf);
+		
+		yy=i2c_read(0xD1,0x6);    // RAED YEAR 
+		YY=((yy>>4)*10)+(yy&0x0f);
+		
+		a=h;
+		a=a&0x1F;
+		
+		//lcd_cmd(0x1);//clear screen
+		lcd_cmd(0x80);//set cursor to home pos
+		lcd_data((a/0x10)+48);
+		lcd_data((a%0x10)+48);
+		lcd_data(':');
+		
+		lcd_data((m/0x10)+48);
+		lcd_data((m%0x10)+48);
+		lcd_data(':');
+		
+		lcd_data((s/0x10)+48);
+		lcd_data((s%0x10)+48);
+		lcd_string(" ");
+
+		if((h>>5)&1)
+    lcd_string("PM");		
+		else
+		lcd_string("AM");
+		
+    lcd_string(" ");
+		lcd_string(day[dow]);  
+ 
+  	lcd_cmd(0xC0);
+    lcd_integer(DD);	// DATE
+		lcd_string("/");	
+		lcd_integer(MM);	// MONTH 
+		lcd_string("/");
+		lcd_integer(YY);	// YEAR
+		 
+		
+		lcd_cmd(0xcc);   // DISPLAY SMILY 
+	  lcd_data(0);
+		lcd_cmd(0xcd);
+		lcd_data(1);
+		
+
+		
+		
+		
+	}
+}
+
+
